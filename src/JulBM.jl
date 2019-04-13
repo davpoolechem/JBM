@@ -19,5 +19,6 @@ BlockMatrix() = BlockMatrix([[]], (1,1), (1,1), (1,1))
 
 include("BMBasic.jl")
 include("BMConstruction.jl")
+include("BMElements.jl")
 
 end
