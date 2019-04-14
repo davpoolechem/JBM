@@ -1,6 +1,6 @@
 module JulBM
 
-mutable struct BlockMatrix{T}
+mutable struct BlockMatrix{T} <: AbstractArray{T,2}
     matrix::Matrix{Matrix{T}}
 
     mdims_blockwise::Tuple{Int64,Int64}
