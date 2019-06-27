@@ -1,2 +1,2 @@
-# JBM
-Implementation of block matrices in Julia
+# SymMatrices
+Implementation of packed-storage symmetric matrices in Julia
