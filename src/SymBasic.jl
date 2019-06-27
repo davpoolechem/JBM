@@ -27,24 +27,25 @@ end
 
 #== functions for converting storage type ==#
 function packed_to_full(A::SymMatrix{T}) where {T}
-    B = Matrix{T}(undef,size(A,1),size(A,2))
+  B = Matrix{T}(undef,size(A,1),size(A,2))
 
-    for i::Int64 in 1:size(B,1), j::Int64 in 1:i
-        B[i,j] = A[i,j]
-    end
+  ij::Int64 = 0
+  for i::Int64 in 1:size(B,1), j::Int64 in 1:i
+    ij += 1
+    B[i,j] = A[ij]
+  end
 
-    for i::Int64 in 1:size(B,1), j::Int64 in 1:i
-        B[j,i] = A[i,j]
-    end
+  for i::Int64 in 1:size(B,1), j::Int64 in 1:i-1
+    B[j,i] = A[i,j]
+  end
 
-    return LinearAlgebra.Symmetric(B)
+  return LinearAlgebra.Symmetric(B)
 end
 
 function full_to_packed(A::AbstractMatrix{T}) where {T}
     B = SymMatrix(size(A,1))
 
     for i::Int64 in 1:size(B,1), j::Int64 in 1:i
-        #ij::Int64 = (i*(i-1)/2) + j
         B[i,j] = A[i,j]
     end
     return B
