@@ -13,24 +13,24 @@ SymMatrix() = SymMatrix([],0,0)
 
 #== uninitialized matrix with given dimensions ==#
 SymMatrix(dim::Int64) = SymMatrix(Vector(undef,Int64(dim*(dim+1)/2)),
-  dim,0)
+  dim,false)
 
 SymMatrix(dim::Int64, hermitian::Bool) = SymMatrix(Vector(undef,
   Int64(dim*(dim+1)/2)),dim,hermitian)
 
 #== matrix initialized to a certain value ==#
-SymMatrix(value,dim::Int64) = SymMatrix(fill(value,Int64(dim*(dim+1)/2)),
-  dim,0)
+SymMatrix(value, dim::Int64) = SymMatrix(fill(value,Int64(dim*(dim+1)/2)),
+  dim,false)
 
-SymMatrix(value,dim::Int64) = SymMatrix(fill(value,Int64(dim*(dim+1)/2)),
-  dim,hermitian)
+SymMatrix(value, dim::Int64, hermitian::Bool) = SymMatrix(fill(value,
+  Int64(dim*(dim+1)/2)),dim,hermitian)
 
 #== matrix initialized by an input vector ==#
-SymMatrix(vector::AbstractVector, dim::Int64) = SymMatrix(vector,
-  dim,0)
+#SymMatrix(vector::AbstractVector, dim::Int64) = SymMatrix(vector,
+#  dim,false)
 
-SymMatrix(vector::AbstractVector, dim::Int64) = SymMatrix(vector,
-  dim,hermitian)
+#SymMatrix(vector::AbstractVector, dim::Int64, hermitian::Bool) = SymMatrix(
+#  vector,dim,hermitian)
 
 #== includes ==#
 include("SymBasic.jl")
