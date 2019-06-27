@@ -31,8 +31,12 @@ function packed_to_full(A::SymMatrix{T}) where {T}
 
     for i::Int64 in 1:size(B,1), j::Int64 in 1:i
         B[i,j] = A[i,j]
+    end
+
+    for i::Int64 in 1:size(B,1), j::Int64 in 1:i
         B[j,i] = A[i,j]
     end
+
     return LinearAlgebra.Symmetric(B)
 end
 
@@ -52,13 +56,7 @@ end
 
 #== addition with arbitrary abstract matrix class ==#
 function Base.:+(A::AbstractMatrix{T}, B::SymMatrix{T}) where {T}
-    C = Matrix(undef,size(B,1),size(B,2))
-
-    for i::Int64 in 1:size(C,1), j::Int64 in 1:i
-        C[i,j] = A[i,j] + B[i,j]
-        if (i != j) C[j,i] = A[j,i] + B[i,j] end
-    end
-    return C
+    return A+packed_to_full(B)
 end
 
 function Base.:+(A::SymMatrix{T}, B::AbstractMatrix{T}) where {T}
@@ -67,12 +65,7 @@ end
 
 #== addition with matrices marked as symmetric ==#
 function Base.:+(A::LinearAlgebra.Symmetric{T}, B::SymMatrix{T}) where {T}
-    C = SymMatrix(size(B,1))
-
-    for i::Int64 in 1:size(C,1), j::Int64 in 1:i
-        C[i,j] = A[i,j] + B[i,j]
-    end
-    return C
+    return full_to_packed(A+packed_to_full(B))
 end
 
 function Base.:+(A::SymMatrix{T}, B::LinearAlgebra.Symmetric{T}) where {T}
@@ -81,12 +74,7 @@ end
 
 #== addition with matrices marked as symmetric ==#
 function Base.:+(A::LinearAlgebra.Hermitian{T}, B::SymMatrix{T}) where {T}
-    C = SymMatrix(size(B,1))
-
-    for i::Int64 in 1:size(C,1), j::Int64 in 1:i
-        C[i,j] = A[i,j] + B[i,j]
-    end
-    return C
+    return full_to_packed(A+packed_to_full(B))
 end
 
 function Base.:+(A::SymMatrix{T}, B::LinearAlgebra.Hermitian{T}) where {T}
@@ -113,8 +101,7 @@ end
 
 #== multiplication with matrices marked as symmetric ==#
 function Base.:*(A::LinearAlgebra.Symmetric{T}, B::SymMatrix{T}) where {T}
-    C = A*packed_to_full(B)
-    return full_to_packed(C)
+    return full_to_packed(A*packed_to_full(B))
 end
 
 function Base.:*(A::SymMatrix{T}, B::LinearAlgebra.Symmetric{T}) where {T}
@@ -123,8 +110,7 @@ end
 
 #== multiplication with matrices marked as symmetric ==#
 function Base.:*(A::LinearAlgebra.Hermitian{T}, B::SymMatrix{T}) where {T}
-    C = A*packed_to_full(B)
-    return full_to_packed(C)
+    return full_to_packed(A*packed_to_full(B))
 end
 
 function Base.:*(A::SymMatrix{T}, B::LinearAlgebra.Hermitian{T}) where {T}
@@ -133,6 +119,5 @@ end
 
 #== multiplication of two symmatrices ==#
 function Base.:*(A::SymMatrix{T}, B::SymMatrix{T}) where {T}
-    C = packed_to_full(A)*packed_to_full(B)
-    return full_to_packed(C)
+    return A*packed_to_full(B)
 end
