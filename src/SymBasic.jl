@@ -22,11 +22,11 @@ function Base.ndims(A::SymMatrix{T}) where {T}
 end
 
 function Base.size(A::SymMatrix{T}) where {T}
-    return (A.dim,)
+    return (A.dim,A.dim)
 end
 
 function Base.size(A::SymMatrix{T}, i::Int64) where {T}
-    return A.dim
+    return (i ∈ [1,2]) ? size(A)[i] : error("Specified dimension does not exist.")
 end
 
 #== functions for converting storage type ==#
