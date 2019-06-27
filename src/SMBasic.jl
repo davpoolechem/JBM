@@ -1,5 +1,9 @@
 import LinearAlgebra
 
+#=======================#
+#== general functions ==#
+#=======================#
+
 #== properties of symmetric matrix ==#
 function Base.eltype(A::SymMatrix{T}) where {T}
     return T
@@ -41,6 +45,10 @@ function full_to_packed(A::AbstractMatrix{T}) where {T}
     end
     return B
 end
+
+#========================#
+#== addition functions ==#
+#========================#
 
 #== addition with arbitrary abstract matrix class ==#
 function Base.:+(A::AbstractMatrix{T}, B::SymMatrix{T}) where {T}
@@ -85,8 +93,46 @@ function Base.:+(A::SymMatrix{T}, B::LinearAlgebra.Hermitian{T}) where {T}
     return B + A
 end
 
-
 #== addition of two symmatrices ==#
 function Base.:+(A::SymMatrix{T}, B::SymMatrix{T}) where {T}
     return SymMatrix(A.matrix + B.matrix,size(B,1))
+end
+
+#==============================#
+#== multiplication functions ==#
+#==============================#
+
+#== multiplication with arbitrary abstract matrix class ==#
+function Base.:*(A::AbstractMatrix{T}, B::SymMatrix{T}) where {T}
+    return A*packed_to_full(B)
+end
+
+function Base.:*(A::SymMatrix{T}, B::AbstractMatrix{T}) where {T}
+    return B*A
+end
+
+#== multiplication with matrices marked as symmetric ==#
+function Base.:*(A::LinearAlgebra.Symmetric{T}, B::SymMatrix{T}) where {T}
+    C = A*packed_to_full(B)
+    return full_to_packed(C)
+end
+
+function Base.:*(A::SymMatrix{T}, B::LinearAlgebra.Symmetric{T}) where {T}
+    return B*A
+end
+
+#== multiplication with matrices marked as symmetric ==#
+function Base.:*(A::LinearAlgebra.Hermitian{T}, B::SymMatrix{T}) where {T}
+    C = A*packed_to_full(B)
+    return full_to_packed(C)
+end
+
+function Base.:*(A::SymMatrix{T}, B::LinearAlgebra.Hermitian{T}) where {T}
+    return B*A
+end
+
+#== multiplication of two symmatrices ==#
+function Base.:*(A::SymMatrix{T}, B::SymMatrix{T}) where {T}
+    C = packed_to_full(A)*packed_to_full(B)
+    return full_to_packed(C)
 end
