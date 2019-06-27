@@ -1,4 +1,4 @@
-module SM
+module Sym
 
 mutable struct SymMatrix{T} <: AbstractVector{T}
   matrix::Vector{T}
@@ -11,8 +11,8 @@ SymMatrix(value,dim::Int64) = SymMatrix(fill(value,Int64(ceil(dim*(dim+1)/2))),d
 SymMatrix(vector::AbstractVector, dim::Int64) = SymMatrix(vector,dim)
 
 
-include("SMBasic.jl")
-include("SMElements.jl")
+include("SymBasic.jl")
+include("SymElements.jl")
 
 #include("BMConstruction.jl")test
 
