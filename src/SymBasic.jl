@@ -37,7 +37,7 @@ function packed_to_full(A::SymMatrix{T}) where {T}
 end
 
 function full_to_packed(A::AbstractMatrix{T}) where {T}
-    B = SymMatrix(zero(T),size(A,1))
+    B = SymMatrix(size(A,1))
 
     for i::Int64 in 1:size(B,1), j::Int64 in 1:i
         #ij::Int64 = (i*(i-1)/2) + j
@@ -67,7 +67,7 @@ end
 
 #== addition with matrices marked as symmetric ==#
 function Base.:+(A::LinearAlgebra.Symmetric{T}, B::SymMatrix{T}) where {T}
-    C = SymMatrix(zero(T),size(B,1))
+    C = SymMatrix(size(B,1))
 
     for i::Int64 in 1:size(C,1), j::Int64 in 1:i
         C[i,j] = A[i,j] + B[i,j]
@@ -81,7 +81,7 @@ end
 
 #== addition with matrices marked as symmetric ==#
 function Base.:+(A::LinearAlgebra.Hermitian{T}, B::SymMatrix{T}) where {T}
-    C = SymMatrix(zero(T),size(B,1))
+    C = SymMatrix(size(B,1))
 
     for i::Int64 in 1:size(C,1), j::Int64 in 1:i
         C[i,j] = A[i,j] + B[i,j]
