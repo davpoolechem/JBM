@@ -35,20 +35,24 @@ function packed_to_full(A::SymMatrix{T}) where {T}
     B[i,j] = A[ij]
   end
 
-  for i::Int64 in 1:size(B,1), j::Int64 in 1:i-1
-    B[j,i] = A[i,j]
+  ij = 0
+  for i::Int64 in 1:size(B,1), j::Int64 in 1:i
+    ij += 1
+    B[j,i] = A[ij]
   end
 
   return LinearAlgebra.Symmetric(B)
 end
 
 function full_to_packed(A::AbstractMatrix{T}) where {T}
-    B = SymMatrix(size(A,1))
+  B = SymMatrix(zero(T),size(A,1))
 
-    for i::Int64 in 1:size(B,1), j::Int64 in 1:i
-        B[i,j] = A[i,j]
-    end
-    return B
+  ij = 0
+  for i::Int64 in 1:size(B,1), j::Int64 in 1:i
+    ij += 1
+    B[ij] = A[i,j]
+  end
+  return B
 end
 
 #========================#
