@@ -6,13 +6,14 @@ mutable struct SymMatrix{T} <: AbstractVector{T}
   dim::Int64 #matrix dimension
   hermitian::Bool #whether matrix is hermitian or not
 
-  SymMatrix{T}(matrix::Vector{T},dim::Int64,hermitian::Bool) where {T} =
-    length(matrix) == Int64(dim*(dim+1)/2) ? new(matrix,dim,hermitian) :
-    error("Matrix size does not match value implied by input dimension")
+  #SymMatrix{T}(matrix::Vector{T},dim::Int64,hermitian::Bool) where {T} =
+  #  length(matrix) == Int64(dim*(dim+1)/2) ?
+  #  new(matrix,dim,hermitian) :
+  #  error("Matrix size does not match value implied by input dimension")
 end
 
 #== empty matrix ==#
-SymMatrix() = SymMatrix([],0,0)
+SymMatrix() = SymMatrix([],0,false)
 
 #== uninitialized matrix with given dimensions ==#
 SymMatrix(dim::Int64) = SymMatrix(Vector(undef,Int64(dim*(dim+1)/2)),

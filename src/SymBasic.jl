@@ -49,6 +49,23 @@ function packed_to_full(A::SymMatrix{T}) where {T}
     LinearAlgebra.Symmetric(B)
 end
 
+function unpack!(A::SymMatrix{T}, B::AbstractMatrix{T}) where {T}
+  ij::Int64 = 0
+  for i::Int64 in 1:size(A,1), j::Int64 in 1:i
+    ij += 1
+    B[i,j] = A[ij]
+  end
+
+  ij = 0
+  for i::Int64 in 1:size(A,1), j::Int64 in 1:i
+    ij += 1
+    B[j,i] = A[ij]
+  end
+
+  return (A.hermitian == true) ? LinearAlgebra.Hermitian(B) :
+    LinearAlgebra.Symmetric(B)
+end
+
 function full_to_packed(A::AbstractMatrix{T}) where {T}
   B = SymMatrix(zero(T),size(A,1))
 
@@ -63,6 +80,15 @@ end
 function full_to_packed(A::LinearAlgebra.Hermitian{T}) where {T}
   B = SymMatrix(zero(T),size(A,1),true)
 
+  ij = 0
+  for i::Int64 in 1:size(B,1), j::Int64 in 1:i
+    ij += 1
+    B[ij] = A[i,j]
+  end
+  return B
+end
+
+function pack!(A::AbstractMatrix{T}, B::SymMatrix{T}) where {T}
   ij = 0
   for i::Int64 in 1:size(B,1), j::Int64 in 1:i
     ij += 1
